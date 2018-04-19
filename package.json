@@ -4,6 +4,9 @@
   "description": "A server project for allowing a browser and Ardunio to play music together. Written for IGME-470.",
   "main": "src/app.js",
   "scripts": {
+    "nodemon": "nodemon --watch ./server ./server/app.js",
+    "start": "node ./server/app.js",
+    "pretest": "eslint ./server --fix",
     "test": "echo \"No tests to run...\""
   },
   "author": "Brian Sandon",
@@ -16,5 +19,13 @@
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.11.0",
     "nodemon": "^1.17.3"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "compression": "^1.7.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.3",
+    "express-handlebars": "^3.0.0",
+    "serve-favicon": "^2.5.0"
   }
 }
