@@ -1,8 +1,21 @@
-const getBrowser = (request, response) => true;
+const getBrowser = (request, response) => {
+  const res = response;
 
-const getArduino = (request, response) => true;
+  return res.render('app');
+};
 
-const getNotFound = (request, response) => true;
+const getArduino = (request, response) => {
+  const res = response;
+
+  return res.render('arduino');
+};
+
+const getNotFound = (request, response) => {
+  const req = request;
+  const res = response;
+
+  return res.render('notfound', { url: req.url, host: req.headers.host });
+};
 
 module.exports.getBrowser = getBrowser;
 module.exports.getArduino = getArduino;
