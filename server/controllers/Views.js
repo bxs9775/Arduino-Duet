@@ -1,14 +1,8 @@
-const getBrowser = (request,response) => {
-  return true;
-};
+const getBrowser = (request, response) => true;
 
-const getArduino = (request,response) => {
-  return true;
-};
+const getArduino = (request, response) => true;
 
-const getNotFound = (request,response) => {
-  return true;
-}
+const getNotFound = (request, response) => true;
 
 module.exports.getBrowser = getBrowser;
 module.exports.getArduino = getArduino;

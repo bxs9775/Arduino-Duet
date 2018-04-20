@@ -1,10 +1,6 @@
-const postNote = (request,response) => {
-  return true;
-};
+const postNote = (request, response) => true;
 
-const getNote = (request,response) => {
-  return true;
-};
+const getNote = (request, response) => true;
 
 module.exports.postNote = postNote;
 module.exports.getNote = getNote;
