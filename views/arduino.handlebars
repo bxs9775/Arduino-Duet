@@ -9,6 +9,12 @@
   <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
 </head>
 <body>
-  <p id="arduinoStatus">No Arduino connected.</p>
+  <div id="statusArea">
+    <label>Status:</label>
+    <p>Arduino: <span  id="arduinoStatus">Not ready.</span></p>
+    <p>Connection: <span id="connectionStatus">Not Connected</span></p>
+  </div>
+  <input id="ledButton" type="button" value="Toggle LED"/>
+  <script src="/assets/arduinoBundle.js"></script>
 </body>
 </html>

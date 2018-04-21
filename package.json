@@ -4,6 +4,11 @@
   "description": "A server project for allowing a browser and Ardunio to play music together. Written for IGME-470.",
   "main": "src/app.js",
   "scripts": {
+    "buildArduinoBundle": "babel ./client/arduino ./client/helper --presets react --out-file ./hosted/ardunioBundle.js",
+    "buildBrowserBundle": "babel ./client/browser ./client/helper --presets react --out-file ./hosted/browserBundle.js",
+    "build": "npm run buildLoginBundle && npm run buildAppBundle",
+    "watchArduinoBundle": "babel --watch ./client/arduino ./client/helper --presets react --out-file ./hosted/arduinoBundle.js",
+    "watchBrowserBundle": "babel --watch ./client/browser ./client/helper --presets react --out-file ./hosted/browserBundle.js",
     "nodemon": "nodemon --watch ./server ./server/app.js",
     "start": "node ./server/app.js",
     "pretest": "eslint ./server --fix",
