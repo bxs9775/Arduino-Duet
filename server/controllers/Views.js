@@ -3,13 +3,6 @@ const getBrowser = (request, response) => {
 
   return res.render('app');
 };
-
-const getArduino = (request, response) => {
-  const res = response;
-
-  return res.render('arduino');
-};
-
 const getNotFound = (request, response) => {
   const req = request;
   const res = response;
@@ -18,5 +11,4 @@ const getNotFound = (request, response) => {
 };
 
 module.exports.getBrowser = getBrowser;
-module.exports.getArduino = getArduino;
 module.exports.getNotFound = getNotFound;
