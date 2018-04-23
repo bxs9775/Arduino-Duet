@@ -6,7 +6,8 @@ const pitches = require('../helpers/pitches.js');
 const Board = (function () {
   // board & board state
   let ready = false;
-  const board = new five.Board();
+  // const board = new five.Board();
+  const board = new five.Board({ port: 'COM3' });
 
   let led = {};
   const currNote = -1;
