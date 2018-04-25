@@ -1,7 +1,7 @@
 const delay = require('delay');
 const five = require('johnny-five');
-// const CapacitiveSensor = require('bindings')('CapacitiveSensor');
 const pitches = require('../helpers/pitches.js');
+const CapacitiveSensor = require('../helpers/CapacitiveSensor.js');
 
 const Board = (function () {
   // board & board state
