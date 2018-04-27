@@ -1,7 +1,11 @@
 const delay = require('delay');
 const five = require('johnny-five');
-const pitches = require('../helpers/pitches.js');
-const CapacitiveSensor = require('../helpers/CapacitiveSensor.js');
+
+const helpers = ('../helpers');
+
+// const { pitches } = helpers;
+const { CapacitiveSensor } = helpers;
+const { Piezo } = five;
 
 const Board = (function () {
   // board & board state
@@ -10,25 +14,25 @@ const Board = (function () {
   const board = new five.Board({ port: 'COM3' });
 
   let led = {};
+  const speaker1 = {};
+  // let speaker2 = {};
   const currNote = -1;
 
   // pins
-  const speaker1 = 0; // audio out to speaker or amp
-  const ledPin = 0;
-  const photoPins = [3, 5, 6, 9, 10];
+  // const speakerPin1 = 0; // audio out to speaker or amp
+  // const ledPin = 0;
+  // const photoPins = [3, 5, 6, 9, 10];
 
   // notes
   const noteDuration = 1000 / 2;
   const notes = [
-    pitches.NOTE_A3, pitches.NOTE_B3, pitches.NOTE_C3, pitches.NOTE_D3, pitches.NOTE_E3,
+    Piezo.Notes.c4, Piezo.Notes.d4, Piezo.Notes.e4, Piezo.Notes.f4, Piezo.Notes.g4,
   ];
 
   // cap sensors
-  /*
   const sensors = [
-    CapacitiveSensor(12,13),CapacitiveSensor(10,11),CapacitiveSensor(8,9),CapacitiveSensor(6,7),CapacitiveSensor(4,5)
+    CapacitiveSensor(board, 12, 13), CapacitiveSensor(board, 10, 11), CapacitiveSensor(board, 8, 9), CapacitiveSensor(board, 6, 7), CapacitiveSensor(board, 4, 5),
   ];
-  */
 
   // keeping track of what was pressed
   const pressedCurr = [false, false, false, false, false];
@@ -37,45 +41,38 @@ const Board = (function () {
   const numNotes = 1;
 
   // plays the note at the given index
-  const playNote = function (index, speaker, callback) {
-    // play note
-    tone(speaker, notes[index], noteDuration);
-
-    delay(noteDuration, () => {
-      noTone(speaker);
-    });
+  const playNote = function (index, speaker) {
+    speaker1.frequency(index, noteDuration);
   };
 
-  /*
   const loop = function () {
     let notePlayed = false;
     let i = 0;
-    const count = 1;
     console.print('Count: ');
     console.println(count);
 
-    while (!notePlayed && i < count) {
+    while (!notePlayed && i < numNotes) {
       pressedLast[i] = pressedCurr[i];
 
       const start = Date.now();
-      const input = 0; // sensors[i].capacitiveSensor(30);
-      console.log(Date.now() - start); // check on performance in milliseconds
-      console.print('\t'); // tab character for debug windown spacing
+      sensors[i].read((input) => {
+        console.log(Date.now() - start); // check on performance in milliseconds
+        console.print('\t'); // tab character for debug windown spacing
 
-      console.println(`${i}: ${input}`); // print sensor output
+        console.println(`${i}: ${input}`); // print sensor output
 
-      pressedCurr[i] = (input > 100);
-      if (pressedCurr[i] && !pressedLast[i]) {
-        playNote(i, speaker1, loop);
-        notePlayed = true;
-      }
+        pressedCurr[i] = (input > 1000);
+        if (pressedCurr[i] && !pressedLast[i]) {
+          playNote(i, speaker1);
+          notePlayed = true;
+        }
+      });
       i++;
     }
-    if (!notePlayed) {
-      delay(noteDuration, loop);
-    }
+    delay(noteDuration, loop);
   };
-  */
+
+  const getNote = (request, response) => response.status(200).json({ note: currNote });
 
   const toggleLed = (request, response) => {
     const res = response;
@@ -92,20 +89,12 @@ const Board = (function () {
     led = new five.Led(12); // led pin
     led.toggle();
     // delay(500, loop);
-    for (let i = 0; i < numNotes; i++) {
-      const resistor = new five.Sensor({
-        pin: photoPins[i],
-        freq: noteDuration,
-      });
-
-      resistor.on('data', () => {
-        console.log(`Sensor ${i} = ${resistor.value}`);
-      });
-    }
+    loop();
   });
 
   return {
     toggleLed,
+    getNote,
   };
 }());
 
