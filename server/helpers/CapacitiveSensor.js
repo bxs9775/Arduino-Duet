@@ -1,16 +1,17 @@
 // Javascript code based on the CapSense.pde example by Paul Stoffregen
 const five = require('johnny-five');
 
-const CapacitiveSensor = function (board, pin1, pin2) {
+const CapacitiveSensor = (board, pin1, pin2) => {
   this.sendPin = new five.Pin({
     pin: pin1,
     type: 'digital',
-    mode: five.Pin.OUTPUT,
+    // mode: five.Pin.OUTPUT,
   });
+
   this.recievePin = new five.Pin({
     pin: pin2,
     type: 'digital',
-    mode: five.Pin.INPUT,
+    // mode: five.Pin.INPUT,
   });
 
   // smoothing filter
@@ -19,16 +20,16 @@ const CapacitiveSensor = function (board, pin1, pin2) {
   // this.fval = 0.2; // fval of 1 = no filter - .0001 = max filter
 
   // stores data
-  this.lowChecked = [false, false, false, false];
-  this.highChecked = [false, false, false, false];
-  this.lowTimes = [0, 0, 0, 0];
-  this.highTimes = [0, 0, 0, 0];
+  const lowChecked = [false, false, false, false];
+  const highChecked = [false, false, false, false];
+  const lowTimes = [0, 0, 0, 0];
+  const highTimes = [0, 0, 0, 0];
 
   const resetArrays = function () {
-    this.lowChecked.fill(false);
-    this.highChecked.fill(false);
-    this.lowTimes.fill(0);
-    this.highTimes.fill(0);
+    lowChecked.fill(false);
+    highChecked.fill(false);
+    lowTimes.fill(0);
+    highTimes.fill(0);
   };
 
   const sum = function (num1, num2) {
@@ -36,8 +37,8 @@ const CapacitiveSensor = function (board, pin1, pin2) {
   };
 
   const calcValue = function (callback) {
-    const x = this.highTimes.reduce(sum);
-    const y = this.lowTimes.reduce(sum);
+    const x = highTimes.reduce(sum);
+    const y = lowTimes.reduce(sum);
 
     // Smoothing function from CapSense.pde
     // this.fout = (this.fval * x) + ((1 - this.fval) * this.accum);
@@ -50,13 +51,13 @@ const CapacitiveSensor = function (board, pin1, pin2) {
 
   const updateTime = function (startTime, index, highBool, callback) {
     const finalTime = Date.now() - startTime;
-    const times = (highBool) ? this.highTimes : this.lowTimes;
-    const checked = (highBool) ? this.highChecked : this.lowChecked;
+    const times = (highBool) ? highTimes : lowTimes;
+    const checked = (highBool) ? highChecked : lowChecked;
 
     times[index] = finalTime;
     checked[index] = true;
 
-    if (!this.lowChecked.contains(false) && !this.highChecked.contains(false)) {
+    if (!lowChecked.contains(false) && !highChecked.contains(false)) {
       calcValue(callback);
     }
   };

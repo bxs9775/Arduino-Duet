@@ -1,7 +1,9 @@
 const delay = require('delay');
 const five = require('johnny-five');
 
-const helpers = ('../helpers');
+const helpers = require('../helpers');
+
+// console.dir(helpers);
 
 // const { pitches } = helpers;
 const { CapacitiveSensor } = helpers;
@@ -29,10 +31,20 @@ const Board = (function () {
     Piezo.Notes.c4, Piezo.Notes.d4, Piezo.Notes.e4, Piezo.Notes.f4, Piezo.Notes.g4,
   ];
 
+  console.dir(CapacitiveSensor);
+
   // cap sensors
+  /*
   const sensors = [
-    CapacitiveSensor(board, 12, 13), CapacitiveSensor(board, 10, 11), CapacitiveSensor(board, 8, 9), CapacitiveSensor(board, 6, 7), CapacitiveSensor(board, 4, 5),
+    CapacitiveSensor(board, 12, 13),
+    CapacitiveSensor(board, 10, 11),
+    CapacitiveSensor(board, 8, 9),
+    CapacitiveSensor(board, 6, 7),
+    CapacitiveSensor(board, 4, 5),
   ];
+  */
+
+  let sensors = [];
 
   // keeping track of what was pressed
   const pressedCurr = [false, false, false, false, false];
@@ -42,32 +54,31 @@ const Board = (function () {
 
   // plays the note at the given index
   const playNote = function (index, speaker) {
-    speaker1.frequency(index, noteDuration);
+    speaker.frequency(notes[index], noteDuration);
   };
 
   const loop = function () {
-    let notePlayed = false;
-    let i = 0;
-    console.print('Count: ');
-    console.println(count);
+    // const notePlayed = false;
+    console.log('Count: ');
+    console.log(numNotes);
 
-    while (!notePlayed && i < numNotes) {
+    for (let i = 0; i < numNotes; i++) {
       pressedLast[i] = pressedCurr[i];
 
       const start = Date.now();
-      sensors[i].read((input) => {
+      const processData = (input) => {
         console.log(Date.now() - start); // check on performance in milliseconds
-        console.print('\t'); // tab character for debug windown spacing
 
-        console.println(`${i}: ${input}`); // print sensor output
+        console.log(`${i}: ${input}`); // print sensor output
 
         pressedCurr[i] = (input > 1000);
         if (pressedCurr[i] && !pressedLast[i]) {
           playNote(i, speaker1);
-          notePlayed = true;
+          // notePlayed = true;
         }
-      });
-      i++;
+      };
+
+      sensors[i].read(processData);
     }
     delay(noteDuration, loop);
   };
@@ -86,9 +97,18 @@ const Board = (function () {
 
   board.on('ready', () => {
     ready = true;
-    led = new five.Led(12); // led pin
+    led = new five.Led(3); // led pin
     led.toggle();
     // delay(500, loop);
+
+    sensors = [
+      CapacitiveSensor(board, 12, 13),
+      CapacitiveSensor(board, 10, 11),
+      CapacitiveSensor(board, 8, 9),
+      CapacitiveSensor(board, 6, 7),
+      CapacitiveSensor(board, 4, 5),
+    ];
+
     loop();
   });
 
