@@ -66,21 +66,17 @@ const Board = (function () {
       pressedLast[i] = pressedCurr[i];
 
       const start = Date.now();
-      const processData = (input) => {
-        console.log(Date.now() - start); // check on performance in milliseconds
 
-        console.log(`${i}: ${input}`); // print sensor output
+      const input = sensors[i].read();
+      console.log(`input = ${input}`);
+      if (input > 1000) {
+        playNote(i, speaker1);
+      }
 
-        pressedCurr[i] = (input > 1000);
-        if (pressedCurr[i] && !pressedLast[i]) {
-          playNote(i, speaker1);
-          // notePlayed = true;
-        }
-      };
-
-      sensors[i].read(processData);
+      const timePassed = Date.now() - start;
+      console.log(`Performance: ${timePassed}`);
     }
-    delay(noteDuration, loop);
+    delay(noteDuration).then(loop);
   };
 
   const getNote = (request, response) => response.status(200).json({ note: currNote });
@@ -102,11 +98,11 @@ const Board = (function () {
     // delay(500, loop);
 
     sensors = [
-      CapacitiveSensor(board, 12, 13),
-      CapacitiveSensor(board, 10, 11),
-      CapacitiveSensor(board, 8, 9),
-      CapacitiveSensor(board, 6, 7),
-      CapacitiveSensor(board, 4, 5),
+      new CapacitiveSensor(board, 12, 13),
+      // new CapacitiveSensor(board, 10, 11),
+      // new CapacitiveSensor(board, 8, 9),
+      // new CapacitiveSensor(board, 6, 7),
+      // new CapacitiveSensor(board, 4, 5),
     ];
 
     loop();
