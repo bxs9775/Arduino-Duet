@@ -13,10 +13,10 @@ const Board = (function () {
   // board & board state
   let ready = false;
   // const board = new five.Board();
-  const board = new five.Board({ port: 'COM4' });
+  const board = new five.Board({ port: 'COM3' });
 
   let led = {};
-  const speaker1 = {};
+  let speaker1 = {};
   // let speaker2 = {};
   const currNote = -1;
 
@@ -106,6 +106,8 @@ const Board = (function () {
       // new CapacitiveSensor(board, 6, 7),
       // new CapacitiveSensor(board, 4, 5),
     ];
+
+    speaker1 = new Piezo('A0');
 
     loop();
   });
