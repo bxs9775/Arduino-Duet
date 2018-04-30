@@ -13,7 +13,7 @@ const Board = (function () {
   // board & board state
   let ready = false;
   // const board = new five.Board();
-  const board = new five.Board({ port: 'COM3' });
+  const board = new five.Board({ port: 'COM4' });
 
   let led = {};
   const speaker1 = {};
@@ -51,7 +51,7 @@ const Board = (function () {
   const pressedLast = [false, false, false, false, false];
 
   const numNotes = 1;
-  let isHigh = true;
+  // const isHigh = true;
 
   // plays the note at the given index
   const playNote = function (index, speaker) {
