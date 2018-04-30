@@ -51,6 +51,7 @@ const Board = (function () {
   const pressedLast = [false, false, false, false, false];
 
   const numNotes = 1;
+  let isHigh = true;
 
   // plays the note at the given index
   const playNote = function (index, speaker) {
@@ -63,6 +64,7 @@ const Board = (function () {
     console.log(numNotes);
 
     for (let i = 0; i < numNotes; i++) {
+      sensors[i].setLow();
       pressedLast[i] = pressedCurr[i];
 
       const start = Date.now();
