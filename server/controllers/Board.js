@@ -1,4 +1,4 @@
-const delay = require('delay');
+// const delay = require('delay');
 const five = require('johnny-five');
 
 const helpers = require('../helpers');
@@ -50,8 +50,12 @@ const Board = (function () {
   const pressedCurr = [false, false, false, false, false];
   const pressedLast = [false, false, false, false, false];
 
-  const numNotes = 1;
+  const input = [0, 0, 0, 0, 0];
+
+  const numNotes = 5;
+  const threshhold = 22;
   // const isHigh = true;
+
 
   // plays the note at the given index
   const playNote = function (index, speaker) {
@@ -70,16 +74,16 @@ const Board = (function () {
 
       // const start = Date.now();
 
-      const input = sensors[i].read();
-      console.log(`input = ${input}`);
-      if (input >= 12) {
+      input[i] = sensors[i].read();
+      console.log(`input ${i} = ${input[i]}`);
+      if (input[i] >= threshhold) {
         playNote(i, speaker1);
       }
 
       // const timePassed = Date.now() - start;
       // console.log(`Performance: ${timePassed}`);
     }
-    delay(noteDuration).then(loop);
+    // delay(noteDuration).then(loop);
   };
 
   const getNote = (request, response) => response.status(200).json({ note: currNote });
@@ -102,15 +106,16 @@ const Board = (function () {
 
     sensors = [
       new CapacitiveSensor(12, 13),
-      // new CapacitiveSensor(10, 11),
-      // new CapacitiveSensor(8, 9),
-      // new CapacitiveSensor(6, 7),
-      // new CapacitiveSensor(4, 5),
+      new CapacitiveSensor(10, 11),
+      new CapacitiveSensor(8, 9),
+      new CapacitiveSensor(6, 7),
+      new CapacitiveSensor(4, 5),
     ];
 
     speaker1 = new Piezo('A0');
 
-    loop();
+    // loop();
+    board.loop(noteDuration, loop);
   });
 
   return {

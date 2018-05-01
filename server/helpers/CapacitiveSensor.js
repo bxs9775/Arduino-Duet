@@ -56,23 +56,24 @@ const CapacitiveSensor = function (pin1, pin2) {
   //
 
   // Tactic 1 ----------------------------
-  /*
+
   this.recievePin.on('low', () => {
-    console.log(`Pin ${this.recievePin.pin} - low`);
+    // console.log(`Pin ${this.recievePin.pin} - low`);
     this.timeToLow = Date.now();
 
     this.sendPin.high();
   });
 
   this.recievePin.on('high', () => {
-    console.log(`Pin ${this.recievePin.pin} - high`);
+    // console.log(`Pin ${this.recievePin.pin} - high`);
     this.timeToHigh = Date.now();
 
     this.sendPin.low();
   });
-  */
+
   //---------------------------------
 
+  /*
   // Tactic 2 ---------------------------------
   this.checkSend = function (state) {
     const data = state.value;
@@ -110,7 +111,8 @@ const CapacitiveSensor = function (pin1, pin2) {
       this.recievePin.query(this.checkLow.bind(this));
     }
   };
-  //------------------------------------
+  //-----------------------------------------
+  */
 
   // Check data ---------------------------------------------------
   /*
@@ -135,7 +137,7 @@ const CapacitiveSensor = function (pin1, pin2) {
 
   // this.sendPin.high();
   // this.sendPin.write(1);
-  this.recievePin.query(this.checkLow.bind(this));
+  // this.recievePin.query(this.checkLow.bind(this));
 
   this.read = () => Math.abs(this.timeToHigh - this.timeToLow);
 
