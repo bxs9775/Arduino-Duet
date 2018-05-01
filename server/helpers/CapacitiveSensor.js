@@ -19,16 +19,20 @@ const updateSensor = (isHigh) => {
 };
 */
 
-const CapacitiveSensor = function (board, pin1, pin2) {
+const CapacitiveSensor = function (pin1, pin2) {
+  // console.log(five.Pin.INPUT);
+  // console.log(five.Pin.OUTPUT);
+
   this.recievePin = new five.Pin({
     pin: pin1,
-    type: 'digital',
+    // type: 'digital',
     mode: five.Pin.INPUT,
   });
+  // this.recievePin.high();
 
   this.sendPin = new five.Pin({
     pin: pin2,
-    type: 'digital',
+    // type: 'digital',
     mode: five.Pin.OUTPUT,
   });
 
@@ -78,15 +82,16 @@ const CapacitiveSensor = function (board, pin1, pin2) {
   this.checkLow = {};
 
   this.checkHigh = function (state) {
+    // this.sendPin.query(this.checkSend.bind(this));
     const data = state.value;
-    console.log(`Pin ${this.sendPin.pin} - data = ${data}`);
+    // console.log(` Rec Pin ${this.recievePin.pin} - data = ${data}`);
     if (data === 1) {
-      console.log(`Pin ${this.recievePin.pin} - high`);
+      // console.log(`Pin ${this.recievePin.pin} - high`);
       this.timeToHigh = Date.now();
       this.sendPin.low();
       this.recievePin.query(this.checkLow.bind(this));
     } else {
-      console.log(`Pin ${this.recievePin.pin} - NOT high`);
+      // console.log(`Pin ${this.recievePin.pin} - NOT high`);
       this.recievePin.query(this.checkHigh.bind(this));
     }
   };
@@ -94,14 +99,14 @@ const CapacitiveSensor = function (board, pin1, pin2) {
   this.checkLow = function (state) {
     // this.sendPin.query(this.checkSend.bind(this));
     const data = state.value;
-    console.log(`Pin ${this.recievePin.pin} - data = ${data}`);
+    // console.log(` Rec Pin ${this.recievePin.pin} - data = ${data}`);
     if (data === 0) {
-      console.log(`Pin ${this.recievePin.pin} - low`);
+      // console.log(`Pin ${this.recievePin.pin} - low`);
       this.timeToLow = Date.now();
       this.sendPin.high();
       this.recievePin.query(this.checkHigh.bind(this));
     } else {
-      console.log(`Pin ${this.recievePin.pin} - NOT low`);
+      // console.log(`Pin ${this.recievePin.pin} - NOT low`);
       this.recievePin.query(this.checkLow.bind(this));
     }
   };

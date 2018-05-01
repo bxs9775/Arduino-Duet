@@ -55,28 +55,29 @@ const Board = (function () {
 
   // plays the note at the given index
   const playNote = function (index, speaker) {
+    console.log(`Play note #${index}!`);
     speaker.frequency(notes[index], noteDuration);
   };
 
   const loop = function () {
     // const notePlayed = false;
-    console.log('Count: ');
-    console.log(numNotes);
+    // console.log('Count: ');
+    // console.log(numNotes);
 
     for (let i = 0; i < numNotes; i++) {
-      sensors[i].setLow();
+      // sensors[i].setLow();
       pressedLast[i] = pressedCurr[i];
 
-      const start = Date.now();
+      // const start = Date.now();
 
       const input = sensors[i].read();
       console.log(`input = ${input}`);
-      if (input > 1000) {
+      if (input >= 12) {
         playNote(i, speaker1);
       }
 
-      const timePassed = Date.now() - start;
-      console.log(`Performance: ${timePassed}`);
+      // const timePassed = Date.now() - start;
+      // console.log(`Performance: ${timePassed}`);
     }
     delay(noteDuration).then(loop);
   };
@@ -100,11 +101,11 @@ const Board = (function () {
     // delay(500, loop);
 
     sensors = [
-      new CapacitiveSensor(board, 12, 13),
-      // new CapacitiveSensor(board, 10, 11),
-      // new CapacitiveSensor(board, 8, 9),
-      // new CapacitiveSensor(board, 6, 7),
-      // new CapacitiveSensor(board, 4, 5),
+      new CapacitiveSensor(12, 13),
+      // new CapacitiveSensor(10, 11),
+      // new CapacitiveSensor(8, 9),
+      // new CapacitiveSensor(6, 7),
+      // new CapacitiveSensor(4, 5),
     ];
 
     speaker1 = new Piezo('A0');
