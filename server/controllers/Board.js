@@ -18,7 +18,6 @@ const Board = (function () {
   let led = {};
   let speaker1 = {};
   // let speaker2 = {};
-  const currNote = -1;
 
   // pins
   // const speakerPin1 = 0; // audio out to speaker or amp
@@ -34,30 +33,24 @@ const Board = (function () {
   // buttons
   let buttons = [];
 
-  // keeping track of what was pressed
-  // const pressedCurr = [false, false, false, false, false];
-  // const pressedLast = [false, false, false, false, false];
-
-  // const input = [0, 0, 0, 0, 0];
+  const buttonDown = [false, false, false, false, false];
 
   const numNotes = 5;
   // const threshhold = 22;
   // const isHigh = true;
 
+  /* Server calls */
+  const getNotes = (request, response) => response.status(200).json({ notes: buttonDown });
 
-  // plays the note at the given index
-  const playNote = function (index, speaker) {
-    console.log(`Play note #${index}!`);
-    console.log(`Play ${notes[index]} for ${noteDuration}`);
-    speaker.frequency(notes[index], noteDuration);
+  const getStatus = (request, response) => {
+    if (!board) {
+      return response.status(200).json({ status: 'Not Found' });
+    }
+    if (!ready) {
+      return response.status(200).json({ status: 'Connected, Not Ready' });
+    }
+    return response.status(200).json({ status: 'Connected, Ready' });
   };
-
-  /*
-  const loop = function () {
-  };
-  */
-
-  const getNote = (request, response) => response.status(200).json({ note: currNote });
 
   const toggleLed = (request, response) => {
     const res = response;
@@ -68,6 +61,16 @@ const Board = (function () {
     led.toggle();
     return res.status(200).json({ message: 'Led toggled...' });
   };
+
+  /* Other functions */
+  // plays the note at the given index
+  const playNote = function (index, speaker) {
+    console.log(buttonDown);
+    console.log(`Play note #${index}!`);
+    console.log(`Play ${notes[index]} for ${noteDuration}`);
+    speaker.frequency(notes[index], noteDuration);
+  };
+
 
   board.on('ready', () => {
     ready = true;
@@ -87,17 +90,23 @@ const Board = (function () {
     ];
     const press = (i) => {
       console.log(`Button ${i} is pressed.`);
+      buttonDown[i] = true;
       playNote(i, speaker1);
+    };
+    const release = function (i) {
+      buttonDown[i] = false;
     };
 
     for (let i = 0; i < numNotes; i++) {
       buttons[i].on('press', () => press(i));
+      buttons[i].on('release', () => release(i));
     }
   });
 
   return {
     toggleLed,
-    getNote,
+    getStatus,
+    getNotes,
   };
 }());
 

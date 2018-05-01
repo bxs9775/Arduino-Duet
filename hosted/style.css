@@ -1,0 +1,30 @@
+.note,.noNote{
+  display: inline;
+  min-width: 20px;
+  min-height: 20px;
+  width: 20px;
+  height: 20px;
+  border: 1px solid black;
+}
+
+.noNote{
+  background-color: lightgray;
+}
+
+.note{
+  background-color: lightgreen;
+  color: darkgreen;
+}
+
+#statusArea{
+  width: 14%;
+  float: right;
+}
+
+#notes{
+  width: 84%;
+}
+
+#notes,#statusArea{
+  border: 1px solid black;
+}
