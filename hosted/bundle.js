@@ -4,7 +4,8 @@
 var info = {
   connected: false,
   duration: 1000 / 2,
-  noteMap: ['C4', 'D4', 'E4', 'F4', 'G4']
+  noteMap: ['C4', 'D4', 'E4', 'F4', 'G4'],
+  prevNotes: [false, false, false, false]
 };
 
 var displayInfo = function displayInfo(info) {
@@ -51,6 +52,15 @@ var getNotes = function getNotes() {
     }
 
     ReactDOM.render(React.createElement(NoteList, { notes: response.notes }), document.querySelector('#notesFromBoard'));
+
+    var duration = info.duration / 1000;
+    //console.log(`Duration: ${duration}`);
+    for (var i = 0; i < 5; i++) {
+      if (response.notes[i] && !info.prevNotes[i]) {
+        info.synth.triggerAttackRelease(info.noteMap[i], duration);
+      }
+    }
+    info.prevNotes = response.notes;
   });
 };
 
@@ -98,6 +108,8 @@ var setup = function setup() {
   var ledButton = document.querySelector("#ledButton");
   ledButton.addEventListener("click", toggleLed);
   window.setInterval(siteLoop, info.duration);
+
+  info.synth = new Tone.Synth().toMaster();
 };
 
 window.onload = setup;
