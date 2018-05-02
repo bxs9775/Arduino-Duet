@@ -57,6 +57,7 @@ const getNotes = function(){
     }
     
     ReactDOM.render(<NoteList notes={response.notes}/>,document.querySelector('#notesFromBoard'));
+    ReactDOM.render(<NoteList notes={info.prevKeys}/>,document.querySelector('#notesFromBrowser'));
     //console.log(`Duration: ${duration}`);
     for(let i = 0; i < 5; i++){
       if(response.notes[i] && !info.prevNotes[i]){
@@ -127,7 +128,7 @@ const setup = function(){
   
   document.addEventListener("keydown", function(e){
     //console.log(`Event: ${e.key}`);
-    console.dir(info.prevKeys);
+    //console.dir(info.prevKeys);
     switch(e.key){
       case "1":
         handleKeyDown(0);
