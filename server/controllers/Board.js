@@ -39,6 +39,15 @@ const Board = (function () {
   // const threshhold = 22;
   // const isHigh = true;
 
+  /* Other functions */
+  // plays the note at the given index
+  const playNote = function (index, speaker) {
+    console.log(buttonDown);
+    console.log(`Play note ${index}!`);
+    console.log(`Play ${notes[index]} for ${noteDuration}`);
+    speaker.frequency(notes[index], noteDuration);
+  };
+
   /* Server calls */
   const getNotes = (request, response) => response.status(200).json({ notes: buttonDown });
 
@@ -62,13 +71,20 @@ const Board = (function () {
     return res.status(200).json({ message: 'Led toggled...' });
   };
 
-  /* Other functions */
-  // plays the note at the given index
-  const playNote = function (index, speaker) {
-    console.log(buttonDown);
-    console.log(`Play note #${index}!`);
-    console.log(`Play ${notes[index]} for ${noteDuration}`);
-    speaker.frequency(notes[index], noteDuration);
+  const playNoteFromBrowser = (request, response) => {
+    const req = request;
+    const res = response;
+
+    if (!ready) {
+      return res.status(503).json({ error: 'Service Unavailable: Board not ready.' });
+    }
+    if (!req.body.note) {
+      return res.status(400).json({ error: '"Note" required.' });
+    }
+    if (req.body.note < 0 || req.body.note > 4) {
+      return res.status(400).json({ error: 'Note is out of range.' });
+    }
+    return playNote(req.body.note, speaker1);
   };
 
 
@@ -105,6 +121,7 @@ const Board = (function () {
 
   return {
     toggleLed,
+    playNoteFromBrowser,
     getStatus,
     getNotes,
   };

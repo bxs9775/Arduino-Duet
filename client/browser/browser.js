@@ -4,6 +4,7 @@ const info = {
   duration: (1000 / 2),
   noteMap: ['C4','D4','E4','F4','G4'],
   prevNotes: [false,false,false,false], 
+  prevKeys: [false,false,false,false,false],
 }
 
 const displayInfo = function (info) {
@@ -15,6 +16,12 @@ const siteLoop = function(){
   getBoardStatus();
   getNotes();
 }
+
+const playNote = function(index){
+  const duration = (info.duration)/1000;
+  
+  info.synth.triggerAttackRelease(info.noteMap[index],duration);
+};
 
 // Basic ajax request handling based of lessons from Rich Media II
 const sendReq= (type, url, data, success) => {
@@ -50,17 +57,24 @@ const getNotes = function(){
     }
     
     ReactDOM.render(<NoteList notes={response.notes}/>,document.querySelector('#notesFromBoard'));
-    
-    const duration = (info.duration)/1000;
     //console.log(`Duration: ${duration}`);
     for(let i = 0; i < 5; i++){
       if(response.notes[i] && !info.prevNotes[i]){
-        info.synth.triggerAttackRelease(info.noteMap[i],duration);
+        playNote(i);
       }
     }
     info.prevNotes = response.notes;
   });
 };
+
+const playNoteAndSend = function(index){
+  playNote(index);
+  
+  //Note dispay code...
+  
+  sendReq('POST', '/board/playNote', `note=${index}`, function(){
+  });
+}
 
 const getBoardStatus = function(){
   const statusArea = document.querySelector("#connectionStatus");
@@ -100,6 +114,59 @@ const setup = function(){
   window.setInterval(siteLoop,info.duration);
   
   info.synth = new Tone.Synth().toMaster();
+  
+  const handleKeyDown = function(index){
+    if(!info.prevKeys[index]){
+      playNoteAndSend(index);
+    }
+    info.prevKeys[index] = true;
+  }
+  const handleKeyUp = function(index){
+    info.prevKeys[index] = false;
+  }
+  
+  document.addEventListener("keydown", function(e){
+    //console.log(`Event: ${e.key}`);
+    console.dir(info.prevKeys);
+    switch(e.key){
+      case "1":
+        handleKeyDown(0);
+        break;
+      case "2":
+        handleKeyDown(1);
+        break;
+      case "3":
+        handleKeyDown(2);
+        break;
+      case "4":
+        handleKeyDown(3);
+        break;
+      case "5":
+        handleKeyDown(4);
+        break;
+    }
+  });
+  
+  document.addEventListener("keyup", function(e){
+    //console.log(`Event: ${e.key}`);
+    switch(e.key){
+      case "1":
+        handleKeyUp(0);
+        break;
+      case "2":
+        handleKeyUp(1);
+        break;
+      case "3":
+        handleKeyUp(2);
+        break;
+      case "4":
+        handleKeyUp(3);
+        break;
+      case "5":
+        handleKeyUp(4);
+        break;
+    }
+  });
 }
 
 window.onload = setup;
