@@ -17,7 +17,6 @@ const Board = (function () {
 
   let led = {};
   let speaker1 = {};
-  let speaker2 = {};
 
   // pins
   // const speakerPin1 = 0; // audio out to speaker or amp
@@ -84,7 +83,7 @@ const Board = (function () {
     if (req.body.note < 0 || req.body.note > 4) {
       return res.status(400).json({ error: 'Note is out of range.' });
     }
-    return playNote(req.body.note, speaker2);
+    return playNote(req.body.note, speaker1);
   };
 
 
@@ -92,9 +91,8 @@ const Board = (function () {
     ready = true;
 
     led = new five.Led(4); // led pin
-    speaker1 = new Piezo(10);
-    speaker2 = new Piezo(3);
-    
+    speaker1 = new Piezo(3);
+
     led.toggle();
     // delay(500, loop);
 
