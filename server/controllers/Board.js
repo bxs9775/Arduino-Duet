@@ -15,7 +15,6 @@ const Board = (function () {
   // const board = new five.Board();
   const board = new five.Board({ port: 'COM3' });
 
-  let led = {};
   let speaker1 = {};
 
   // pins
@@ -60,16 +59,6 @@ const Board = (function () {
     return response.status(200).json({ status: 'Connected, Ready' });
   };
 
-  const toggleLed = (request, response) => {
-    const res = response;
-
-    if (!ready) {
-      return res.status(503).json({ error: 'Service Unavailable: Board not ready.' });
-    }
-    led.toggle();
-    return res.status(200).json({ message: 'Led toggled...' });
-  };
-
   const playNoteFromBrowser = (request, response) => {
     const req = request;
     const res = response;
@@ -90,11 +79,7 @@ const Board = (function () {
   board.on('ready', () => {
     ready = true;
 
-    led = new five.Led(4); // led pin
     speaker1 = new Piezo(3);
-
-    led.toggle();
-    // delay(500, loop);
 
     buttons = [
       new Button(5),
@@ -119,7 +104,6 @@ const Board = (function () {
   });
 
   return {
-    toggleLed,
     playNoteFromBrowser,
     getStatus,
     getNotes,
