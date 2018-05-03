@@ -42,12 +42,6 @@ var sendReq = function sendReq(type, url, data, success) {
 };
 
 /* Event Handling */
-var toggleLed = function toggleLed() {
-  sendReq('POST', '/board/toggleLed', '', function () {
-    displayInfo('Led has toggled.');
-  });
-};
-
 var getNotes = function getNotes() {
   sendReq('GET', '/board/notes', '', function (response) {
     if (response.error) {
@@ -60,7 +54,6 @@ var getNotes = function getNotes() {
 
     ReactDOM.render(React.createElement(NoteList, { notes: response.notes }), document.querySelector('#notesFromBoard'));
     ReactDOM.render(React.createElement(NoteList, { notes: info.prevKeys }), document.querySelector('#notesFromBrowser'));
-    //console.log(`Duration: ${duration}`);
     for (var i = 0; i < 5; i++) {
       if (response.notes[i] && !info.prevNotes[i]) {
         playNote(i);
@@ -119,8 +112,6 @@ var NoteList = function NoteList(props) {
 
 /*Setup*/
 var setup = function setup() {
-  var ledButton = document.querySelector("#ledButton");
-  ledButton.addEventListener("click", toggleLed);
   window.setInterval(siteLoop, info.duration);
 
   info.synth = new Tone.Synth().toMaster();

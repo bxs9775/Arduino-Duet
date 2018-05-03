@@ -12,15 +12,9 @@ const { Button } = five;
 const Board = (function () {
   // board & board state
   let ready = false;
-  // const board = new five.Board();
   const board = new five.Board({ port: 'COM3' });
 
   let speaker1 = {};
-
-  // pins
-  // const speakerPin1 = 0; // audio out to speaker or amp
-  // const ledPin = 0;
-  // const photoPins = [3, 5, 6, 9, 10];
 
   // notes
   const noteDuration = 1000 / 2;
@@ -34,15 +28,10 @@ const Board = (function () {
   const buttonDown = [false, false, false, false, false];
 
   const numNotes = 5;
-  // const threshhold = 22;
-  // const isHigh = true;
 
   /* Other functions */
   // plays the note at the given index
   const playNote = function (index, speaker) {
-    console.log(buttonDown);
-    console.log(`Play note ${index}!`);
-    console.log(`Play ${notes[index]} for ${noteDuration}`);
     speaker.frequency(notes[index], noteDuration);
   };
 
@@ -89,7 +78,6 @@ const Board = (function () {
       new Button(13),
     ];
     const press = (i) => {
-      console.log(`Button ${i} is pressed.`);
       buttonDown[i] = true;
       playNote(i, speaker1);
     };

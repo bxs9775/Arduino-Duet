@@ -5,7 +5,6 @@ const favicon = require('serve-favicon');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const expressHandlebars = require('express-handlebars');
-// const url = require('url');
 
 // sets the port for the server to use
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
@@ -30,8 +29,6 @@ app.use(compression());
 app.use(bodyParser.urlencoded({
   extended: true,
 }));
-
-/* Should I add session? */
 
 // views
 app.engine('handlebars', expressHandlebars({ defaultLayout: 'main' }));
